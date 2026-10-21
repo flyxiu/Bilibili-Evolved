@@ -1,9 +1,10 @@
 // ==UserScript==
-// @name            Bilibili Evolved
+// @name            Bilibili Evolved CN
+// @namespace       https://github.com/flyxiu/Bilibili-Evolved
 // @description     强大的哔哩哔哩增强脚本
 // @updateURL       https://ghfast.top/https://raw.githubusercontent.com/flyxiu/Bilibili-Evolved/master/dist/bilibili-evolved.user.js
 // @downloadURL     https://ghfast.top/https://raw.githubusercontent.com/flyxiu/Bilibili-Evolved/master/dist/bilibili-evolved.user.js
-// @version         2.11.7
+// @version         2.11.8
 // @author          Grant Howard, Coulomb-G
 // @copyright       2026, Grant Howard (https://github.com/the1812) & Coulomb-G (https://github.com/Coulomb-G)
 // @license         MIT
