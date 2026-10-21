@@ -11,7 +11,7 @@
   2. 组件 CDN：cdn.jsdelivr.net -> fastly.jsdelivr.net（路径格式一致）
   3. 备用 CDN：GitHub 源指向 flyxiu fork + ghfast 镜像
   4. 改名 Bilibili Evolved CN + 独立 @namespace（避开和官方脚本同名冲突）
-  5. 版本号追加 .9（2.11.5 -> 2.11.5.9），保证永远比上一版大，TM 才会正常提示升级
+  5. 版本号追加 .10（2.11.5 -> 2.11.5.10），保证永远比上一版大，TM 才会正常提示升级
   6. 更新地址、反馈渠道指向自己的 fork（LICENCE.md 要求）
 """
 import os
@@ -42,8 +42,8 @@ def patch(raw: bytes, lodash: bytes) -> bytes:
     m = re.search(r"//\s*@version\s+([\d.]+)", txt)
     if m:
         ver = m.group(1)
-        if not ver.endswith(".9"):
-            txt = txt.replace(m.group(0), "// @version         " + ver + ".9", 1)
+        if not ver.endswith(".10"):
+            txt = txt.replace(m.group(0), "// @version         " + ver + ".10", 1)
 
     # ---------- 3. 删除 lodash 的 @require ----------
     txt = re.sub(r"//\s*@require\s+https?://[^\r\n]*lodash[^\r\n]*\r?\n", "", txt)
@@ -58,6 +58,12 @@ def patch(raw: bytes, lodash: bytes) -> bytes:
     txt = txt.replace(
         "GitHub:(e,t)=>`https://raw.githubusercontent.com/${t||r}/Bilibili-Evolved/${e}/`",
         "GitHub:(e,t)=>`https://%s/${t||r}/Bilibili-Evolved/${e}/`" % GHFAST)
+    # 默认更新源 AltCdn 拉不到组件（fastly/jsdelivr 在国内超时），改走 GitHub root
+    txt = txt.replace("cdnRoot:{defaultValue:a.CdnTypes.AltCdn",
+                      "cdnRoot:{defaultValue:a.CdnTypes.GitHub")
+    txt = txt.replace(
+        "jsDelivr:(e,t)=>o.meta.compilationInfo.allCdns.jsDelivr.root(e,t)",
+        "jsDelivr:(e,t)=>o.meta.compilationInfo.allCdns.GitHub.root(e,t)")
 
     # ---------- 5. 更新地址 / 反馈渠道 ----------
     txt = txt.replace(
