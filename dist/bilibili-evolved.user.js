@@ -4,7 +4,7 @@
 // @description     强大的哔哩哔哩增强脚本
 // @updateURL       https://ghfast.top/https://raw.githubusercontent.com/flyxiu/Bilibili-Evolved/master/dist/bilibili-evolved.user.js
 // @downloadURL     https://ghfast.top/https://raw.githubusercontent.com/flyxiu/Bilibili-Evolved/master/dist/bilibili-evolved.user.js
-// @version         2.11.8
+// @version         2.11.5.9
 // @author          Grant Howard, Coulomb-G
 // @copyright       2026, Grant Howard (https://github.com/the1812) & Coulomb-G (https://github.com/Coulomb-G)
 // @license         MIT
@@ -43,8 +43,8 @@
 // @connect         translate.google.com
 // @connect         localhost
 // @connect         *
-// @icon            https://ghfast.top/https://raw.githubusercontent.com/the1812/Bilibili-Evolved/preview/images/logo-small.png
-// @icon64          https://ghfast.top/https://raw.githubusercontent.com/the1812/Bilibili-Evolved/preview/images/logo.png
+// @icon            https://raw.githubusercontent.com/the1812/Bilibili-Evolved/preview/images/logo-small.png
+// @icon64          https://raw.githubusercontent.com/the1812/Bilibili-Evolved/preview/images/logo.png
 // ==/UserScript==
 
 /* ==== lodash 4.17.21 inlined (sha256 a9705dfc...) ==== */
