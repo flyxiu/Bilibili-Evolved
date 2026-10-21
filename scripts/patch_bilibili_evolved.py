@@ -42,8 +42,8 @@ def patch(raw: bytes, lodash: bytes) -> bytes:
     m = re.search(r"//\s*@version\s+([\d.]+)", txt)
     if m:
         ver = m.group(1)
-        if not ver.endswith(".10"):
-            txt = txt.replace(m.group(0), "// @version         " + ver + ".10", 1)
+        if not ver.endswith(".11"):
+            txt = txt.replace(m.group(0), "// @version         " + ver + ".11", 1)
 
     # ---------- 3. 删除 lodash 的 @require ----------
     txt = re.sub(r"//\s*@require\s+https?://[^\r\n]*lodash[^\r\n]*\r?\n", "", txt)
@@ -64,6 +64,10 @@ def patch(raw: bytes, lodash: bytes) -> bytes:
     txt = txt.replace(
         "jsDelivr:(e,t)=>o.meta.compilationInfo.allCdns.jsDelivr.root(e,t)",
         "jsDelivr:(e,t)=>o.meta.compilationInfo.allCdns.GitHub.root(e,t)")
+    # AltCdn 也强制走 ghfast：TM 存储里已经缓存了 cdnRoot=AltCdn，改默认值不生效
+    txt = txt.replace(
+        "AltCdn:(e,t)=>o.meta.compilationInfo.altCdn.root(e,t)",
+        "AltCdn:(e,t)=>`https://%s/${t||r}/Bilibili-Evolved/${e}/`" % GHFAST)
 
     # ---------- 5. 更新地址 / 反馈渠道 ----------
     txt = txt.replace(
