@@ -1,0 +1,49 @@
+name: sync-cn
+
+# 每天北京时间 9:00 检查上游是否发新版，有就自动打补丁并提交
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 下载 lodash（国内镜像）
+        run: curl -sL --retry 3 -o /tmp/lodash.min.js https://registry.npmmirror.com/lodash/4.17.21/files/lodash.min.js
+
+      - name: 下载上游脚本
+        run: |
+          curl -sL --retry 3 -o /tmp/upstream.user.js \
+            https://raw.githubusercontent.com/the1812/Bilibili-Evolved/master/dist/bilibili-evolved.user.js
+          ls -l /tmp/upstream.user.js
+
+      - name: 套用国内补丁
+        run: python scripts/patch_bilibili_evolved.py /tmp/upstream.user.js dist/bilibili-evolved.user.js /tmp/lodash.min.js
+
+      - name: 语法检查
+        run: |
+          node --check dist/bilibili-evolved.user.js
+          grep -m1 '@version' dist/bilibili-evolved.user.js
+
+      - name: 有变化则提交
+        run: |
+          if git diff --quiet -- dist/bilibili-evolved.user.js; then
+            echo "上游无更新，跳过"
+            exit 0
+          fi
+          git config user.name "cn-sync-bot"
+          git config user.email "cn-sync@users.noreply.github.com"
+          git add dist/bilibili-evolved.user.js
+          git commit -m "sync: 跟随上游 $(date -u +%Y-%m-%d)"
+          git push
